@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActionPanel, Action, Grid, getPreferenceValues } from "@raycast/api";
+import { ActionPanel, Action, Grid, getPreferenceValues, Clipboard } from "@raycast/api";
 import fs from 'fs'
 import path from "node:path";
 import { useFrecencySorting } from "@raycast/utils";
@@ -47,7 +47,12 @@ export default function Command() {
             quickLook={{ path: filePath, name: file }} // lets user Quick Look (play) the GIF
             actions={
               <ActionPanel>
-                <Action.CopyToClipboard content={filePath} />
+                <Action
+                  title="Copy GIF"
+                  onAction={async () => {
+                    await Clipboard.copy({ file: filePath });
+                  }}
+                />
               </ActionPanel>
             }
           />
