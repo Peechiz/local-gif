@@ -1,3 +1,3 @@
 # Local GIFs
 
-Search and preview your local gif folder
+A raycast plugin to Search and copy/paste from your local gif folder.  Supports tags!
