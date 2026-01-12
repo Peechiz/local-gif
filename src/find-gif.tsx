@@ -5,6 +5,7 @@ import path from "node:path";
 import { useFrecencySorting } from "@raycast/utils";
 import { GifMetadata, loadMetadata, cleanupMetadata } from "./metadata";
 import TagEditForm from "./TagEditForm";
+import GifDetailView from "./GifDetailView";
 
 interface GifItem {
   id: string;
@@ -102,8 +103,7 @@ export default function Command() {
               return (
                 <Grid.Item
                   key={filePath}
-                  title={file}
-                  subtitle={tags.length > 0 ? tags.map((t) => `#${t}`).join(" ") : undefined}
+                  title={file.replace(/\.gif$/i, '')}
                   keywords={tags}
                   content={{ value: { source: filePath }, tooltip: file }}
                   quickLook={{ path: filePath, name: file }}
@@ -114,6 +114,20 @@ export default function Command() {
                         onAction={async () => {
                           await Clipboard.copy({ file: filePath });
                         }}
+                      />
+                      <Action.Push
+                        title="View Details"
+                        target={
+                          <GifDetailView
+                            filename={file}
+                            filePath={filePath}
+                            tags={tags}
+                            onTagsUpdated={async () => {
+                              const updated = await loadMetadata();
+                              setMetadata(updated);
+                            }}
+                          />
+                        }
                       />
                       <Action.Push
                         title="Edit Tags"
@@ -140,8 +154,7 @@ export default function Command() {
             return (
               <Grid.Item
                 key={filePath}
-                title={file}
-                subtitle={tags.length > 0 ? tags.map((t) => `#${t}`).join(" ") : undefined}
+                title={file.replace(/\.gif$/i, '')}
                 keywords={tags}
                 content={{ value: { source: filePath }, tooltip: file }}
                 quickLook={{ path: filePath, name: file }}
@@ -152,6 +165,20 @@ export default function Command() {
                       onAction={async () => {
                         await Clipboard.copy({ file: filePath });
                       }}
+                    />
+                    <Action.Push
+                      title="View Details"
+                      target={
+                        <GifDetailView
+                          filename={file}
+                          filePath={filePath}
+                          tags={tags}
+                          onTagsUpdated={async () => {
+                            const updated = await loadMetadata();
+                            setMetadata(updated);
+                          }}
+                        />
+                      }
                     />
                     <Action.Push
                       title="Edit Tags"
